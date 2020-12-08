@@ -6,10 +6,12 @@
     Instrutores: Leandro Oliveira
                  Romulo Costa
                  
-    membros: Hugo Castelar Lack Veiga
+    Membros: Hugo Castelar Lack Veiga
              Iury Cabral Chermont
              Luiz Felipe Macario da Cruz
-             Vinícius Santiago de Paula*/
+             Vinícius Santiago de Paula
+             Ricardo Calmona Souza
+*/
 
 
 #include <SimpleModbusSlave.h>
@@ -54,6 +56,11 @@ void setup(){
     pinMode(bomba,  OUTPUT);
     pinMode(LDR, INPUT);
     pinMode(sensorNv, INPUT);
+
+    digitalWrite(cooler, HIGH);
+    digitalWrite(bomba, HIGH);
+    digitalWrite(luz, HIGH);
+    
 }
 void loop() {
   
@@ -65,8 +72,6 @@ void loop() {
 
     int intensidade = (analogRead(LDR)*0.09775);
 
-    
-    
     int chk = DHT.read11(DHT11_PIN);
    
     holdingRegs[LUMINOSIDADE] =   analogRead(LDR); 
@@ -77,24 +82,24 @@ void loop() {
     holdingRegs[BOMBEAMENTO] =    digitalRead(bomba);
     holdingRegs[ILUMINACAO] =     digitalRead(luz);
 
-      if(intensidade > 5)
-      {digitalWrite(luz, LOW);  
+      if(intensidade > 25)
+      {digitalWrite(luz, HIGH);  
       }
       else
-      {digitalWrite(luz, HIGH);
+      {digitalWrite(luz, LOW);
       }
 
       if(DHT.humidity > 80 || DHT.temperature > 30)
-      {digitalWrite(cooler, HIGH);
-      }
-      else
       {digitalWrite(cooler, LOW);
       }
+      else
+      {digitalWrite(cooler, HIGH);
+      }
           
-      if (nivel > 50){
-      digitalWrite(bomba, HIGH);
+      if (nivel > 30){
+      digitalWrite(bomba, LOW);
       }
       else{;
-      digitalWrite(bomba, LOW);
+      digitalWrite(bomba, HIGH);
       }
 } 
